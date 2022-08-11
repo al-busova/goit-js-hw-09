@@ -1,0 +1,65 @@
+import flatpickr from "flatpickr";
+import "flatpickr/dist/flatpickr.min.css";
+import Notiflix from 'notiflix';
+
+const btnStartEl = document.querySelector('[data-start]');
+const timerEl = document.querySelector('[data-timer]');
+
+btnStartEl.disabled = true;
+
+let deadline = null;
+const options = {
+  enableTime: true,
+  time_24hr: true,
+  defaultDate: new Date(),
+  minuteIncrement: 1,
+  onClose(selectedDates) {
+      if (selectedDates[0] < options.defaultDate) {
+          Notiflix.Notify.failure("Please choose a date in the future");
+      } else {
+          btnStartEl.disabled = false;
+          deadline = selectedDates[0];
+      }
+  },
+};
+
+btnStartEl.addEventListener('click', timer);
+flatpickr('#datetime-picker', options);
+
+function timer() {
+    btnStartEl.disabled = true;
+    intervalId = setInterval(() => {
+            const currentDate = new Date;
+            const delta = deadline - currentDate;
+            const { days, hours, minutes, seconds } = convertMs(delta);
+            if (delta <= 0) {
+                clearInterval(intervalId);
+                return;
+            }
+            timerEl.textContent = `${days} : ${hours} : ${minutes} : ${seconds}`;  
+        }, 1000); 
+}
+
+
+function convertMs(ms) {
+  // Number of milliseconds per unit of time
+  const second = 1000;
+  const minute = second * 60;
+  const hour = minute * 60;
+  const day = hour * 24;
+
+  // Remaining days
+  const days = addLeadingZero(Math.floor(ms / day));
+  // Remaining hours
+  const hours = addLeadingZero(Math.floor((ms % day) / hour));
+  // Remaining minutes
+  const minutes = addLeadingZero(Math.floor(((ms % day) % hour) / minute));
+  // Remaining seconds
+  const seconds = addLeadingZero(Math.floor((((ms % day) % hour) % minute) / second));
+
+  return { days, hours, minutes, seconds };
+}
+
+function addLeadingZero(value) {
+    return String(value).padStart(2, '0');
+}
