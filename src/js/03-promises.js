@@ -16,22 +16,23 @@ function createPromise(position, delay) {
   })
 
 }
-
-function getinfoForm() {
-  return formData = {
-    amount: formEl.elements.amount.value,
-    delay: formEl.elements.delay.value,
-    step: formEl.elements.step.value
-  }
+function saveInfoInput() {
+const formData = {
+  amount: formEl.elements.amount.value,
+  delay: formEl.elements.delay.value,
+  step: formEl.elements.step.value
+};
+  return formData;
 }
+
 
 function submitForm(e) {
   e.preventDefault();
   let stepInCollection;
-  for (let i = 0; i < getinfoForm().amount; i += 1) {
-  stepInCollection = stepInCollection + Number(getinfoForm().step);
+  for (let i = 0; i < saveInfoInput() .amount; i += 1) {
+  stepInCollection = stepInCollection + Number(saveInfoInput() .step);
     if (i === 0) {
-      stepInCollection = Number(getinfoForm().delay);
+      stepInCollection = Number(saveInfoInput() .delay);
     }
       createPromise(i + 1, stepInCollection )
         .then(({ position, delay }) => {
@@ -44,4 +45,4 @@ function submitForm(e) {
 }
  
 formEl.addEventListener('submit',submitForm);
- 
+formEl.addEventListener('input', saveInfoInput );
