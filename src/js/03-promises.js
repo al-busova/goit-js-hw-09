@@ -28,7 +28,7 @@ function getinfoForm() {
 function submitForm(e) {
   e.preventDefault();
   let stepInCollection;
-  for (i = 0; i < getinfoForm().amount; i += 1) {
+  for (let i = 0; i < getinfoForm().amount; i += 1) {
   stepInCollection = stepInCollection + Number(getinfoForm().step);
     if (i === 0) {
       stepInCollection = Number(getinfoForm().delay);
